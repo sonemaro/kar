@@ -93,20 +93,18 @@ func (sh *shared) resolve() error {
 		if tp == "" {
 			tp = defaultTokenPath()
 		}
-		if !strings.HasPrefix(tp, "~/") {
-			if info, err := os.Stat(tp); err == nil && info.Mode().Perm() != 0o600 {
-				fmt.Fprintf(os.Stderr, "kar: warning: %s is not mode 600\n", tp)
-			}
+		if strings.HasPrefix(tp, "~/") {
+			home, _ := os.UserHomeDir()
+			tp = filepath.Join(home, tp[2:])
+		}
+		if info, err := os.Stat(tp); err == nil && info.Mode().Perm() != 0o600 {
+			fmt.Fprintf(os.Stderr, "kar: warning: %s is not mode 600\n", tp)
 		}
 		b, err := os.ReadFile(tp)
 		if err != nil {
 			return errors.New("no API token: pass --token, set $KAR_TOKEN, or write the token to " + tp)
 		}
 		token = strings.TrimSpace(string(b))
-	}
-	if tp := cfg.TokenFile; strings.HasPrefix(tp, "~/") {
-		home, _ := os.UserHomeDir()
-		cfg.TokenFile = filepath.Join(home, tp[2:])
 	}
 
 	cfg.Site = firstNonEmpty(sh.site, cfg.Site)
