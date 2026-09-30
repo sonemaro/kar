@@ -1,0 +1,10 @@
+{
+  "site": "https://your-site.atlassian.net",
+  "email": "you@example.com",
+  "token_file": "~/.jira-token",
+  "work_project": "WORK",
+  "roadmap_project": "ROADMAP",
+  "field_project_start": "customfield_10059",
+  "field_project_target": "customfield_10053",
+  "field_roadmap_lane": "customfield_10054"
+}
